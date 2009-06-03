@@ -94,18 +94,23 @@ module ShopifyAPI
       params.each { |k,value| send("#{k}=", value) }
     end
 
-    def initialize(url, token = nil)
-      url.gsub!(/https?:\/\//, '')                            # remove http:// or https://
-      url = "#{url}.myshopify.com" unless url.include?('.')   # extend url to myshopify.com if no host is given
-      
-      self.url, self.token = url, token
+    def initialize(params)
+      self.url, self.token = params[:shop], params[:t]
+
+      if params[:signature]
+        raise "Invalid Signature: Possible malicious login" unless valid_signature?(params)
+      end
+
+      self.class.prepare_url(self.url)
     end
     
     def shop
       Shop.current
     end
     
-    def create_permission_url
+    def self.create_permission_url(url)
+      prepare_url(url)
+      
       "http://#{url}/admin/api/auth?api_key=#{api_key}"
     end
 
@@ -127,6 +132,18 @@ module ShopifyAPI
     # and then calculating a MD5 hexdigest. 
     def computed_password
       Digest::MD5.hexdigest(secret + token.to_s)
+    end
+    
+    def self.prepare_url(url)
+      url.gsub!(/https?:\/\//, '')                            # remove http:// or https://
+      url.concat(".myshopify.com") unless url.include?('.')   # extend url to myshopify.com if no host is given
+    end
+    
+    def valid_signature?(params)
+      signature = params[:signature]
+      sorted_params = params.except(:signature, :action, :controller).collect{|k,v|"#{k}=#{v}"}.sort.join
+
+      Digest::MD5.hexdigest(secret + sorted_params) == signature
     end
   end
 
