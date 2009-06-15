@@ -1,4 +1,3 @@
-require 'shopify_api'
 require 'shopify_login_protection'
 
 # check dependencies
