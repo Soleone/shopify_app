@@ -1,6 +1,22 @@
 require 'shopify_api'
 require 'shopify_login_protection'
 
+# check dependencies
+if config.respond_to?(:gems)
+  config.gem 'shopify_api'
+else
+  begin
+    require 'shopify_api'
+  rescue LoadError
+    begin
+      gem 'shopify_api'
+    rescue Gem::LoadError
+      puts "You have to install the shopify_api gem before you can use the shopify_app generator (gem install shopify_api)."
+    end
+  end
+end
+
+
 if ENV['SHOPIFY_API_KEY'] && ENV['SHOPIFY_API_SECRET']
   Rails.logger.info "[Shopify App] Loading API credentials from environment"
   
