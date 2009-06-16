@@ -17,15 +17,16 @@ bq. @script/plugin install git://github.com/Shopify/shopify_app@
 
 h3. Usage:
 
-Pass your API key and then your Secret, which the login controller 
-will need to authenticate with your shop.
+All API usage happens through Shopify applications, created by either shop owners for their own shops, or by Shopify Partners for use by other shop owners:
 
-If you don't have an API key yet, register your application at: "YourShopURL/admin/api":#
+* Shop owners can create applications for themselves through their own admin (under the Preferences > Applications tab).
+* Shopify Partners create applications through their admin. If you don't have a Partners account yet, "register here":http://app.shopify.com/services/partners for free.
 
-(e.g. "http://yourshopname.myshopify.com/admin/api":#)
-
+For more information and detailed documentation visit http://api.shopify.com
     
 h3. Example:
+
+Pass your API key and then your Secret, which the login controller will need to authenticate with your shop.
 
 @script/generate shopify_app edffbb1bb793e2750686e6f4647a384a fed5bb18hde3e2750686e6f4647a781a@
         
