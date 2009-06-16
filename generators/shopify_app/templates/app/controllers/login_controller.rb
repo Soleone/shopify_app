@@ -1,6 +1,9 @@
 class LoginController < ApplicationController
   def index
-    # Ask user for their #{shop}.myshopify.com address
+    # Ask user for their #{shop}.myshopify.com address if not provided as a param
+    if params[:shop].present?
+      redirect_to :action => "authenticate", :shop => params[:shop]
+    end
   end
 
   def authenticate

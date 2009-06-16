@@ -7,7 +7,8 @@ require 'ftools'
 
 VERSION = '0.0.1'
 
-Gem::manage_gems
+# Gem.manage_gems is deprecated since 1.3.4
+Gem::manage_gems if Gem.respond_to?("manage_gems")
 
 puts 'Starting to build a new Gem...'
 spec = Gem::Specification.new do |s|
@@ -27,6 +28,7 @@ spec = Gem::Specification.new do |s|
     # s.extra_rdoc_files = ["README"]
     s.add_dependency 'activesupport'
     s.add_dependency 'activeresource'
+    s.add_dependency 'shopify_api'
 end
 
 Rake::GemPackageTask.new(spec) do |pkg|
